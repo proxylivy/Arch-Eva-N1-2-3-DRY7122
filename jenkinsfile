@@ -1,0 +1,23 @@
+// Jenkinsfile
+pipeline {
+    agent any
+    stages {
+        stage('Cambiar saludo') {
+            steps {
+                sh 'sed -i "s/^Hola$/Hola profesor/" saludo.txt'
+            }
+        }
+        stage('Commit & Push') {
+            environment { GIT_AUTHOR_NAME='Jenkins'; GIT_COMMITTER_NAME='Jenkins' }
+            steps {
+                sh '''
+                  git config user.email "ci@example.com"
+                  git config user.name "Jenkins CI"
+                  git add saludo.txt
+                  git commit -m "CI: saludo actualizado"
+                  git push origin HEAD:main
+                '''
+            }
+        }
+    }
+}
