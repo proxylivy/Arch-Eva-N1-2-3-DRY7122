@@ -1,0 +1,9 @@
+services:
+  dozzle:
+    image: docker.io/amir20/dozzle:latest
+    container_name: dozzle
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    ports:
+      - "3003:8080"
