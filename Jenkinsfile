@@ -1,26 +1,27 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     stages {
-        stage('Clonar repo') {
+        stage('Clonar Repo') {
             steps {
                 checkout scm
             }
         }
         stage('Construir Imagen Docker') {
             steps {
-                script {
-                    sh "docker build -t sample-app:latest ."
-                }
+                sh 'docker build -t sample-app:latest .'
             }
         }
         stage('Desplegar contenedor') {
             steps {
-                script {
-                    sh '''
+                sh '''
                     docker rm -f sample-app || true
                     docker run -d -p 9999:9999 --name sample-app sample-app:latest
-                    '''
-                }
+                '''
             }
         }
     }
